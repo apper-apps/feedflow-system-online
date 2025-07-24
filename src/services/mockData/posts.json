@@ -1,0 +1,37 @@
+[
+  {
+    "Id": 1,
+    "author": "Alex Chen",
+    "content": "Just finished reading an amazing book about the future of AI. The possibilities are endless, but we need to be thoughtful about how we implement these technologies. What are your thoughts on AI ethics?",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "likes": 12
+  },
+  {
+    "Id": 2,
+    "author": "Sarah Johnson",
+    "content": "Beautiful sunset today! Sometimes we get so caught up in our daily routines that we forget to appreciate the simple moments. Taking time to pause and observe the world around us can be so grounding. 🌅",
+    "timestamp": "2024-01-15T18:45:00Z",
+    "likes": 8
+  },
+  {
+    "Id": 3,
+    "author": "Mike Rodriguez",
+    "content": "Working on a new project that combines machine learning with environmental data. The goal is to help cities make better decisions about air quality monitoring. Science and technology for good! 🌍",
+    "timestamp": "2024-01-16T09:15:00Z",
+    "likes": 15
+  },
+  {
+    "Id": 4,
+    "author": "Emma Thompson",
+    "content": "Coffee shop productivity is real! There's something about the ambient noise and energy that helps me focus. Currently working on my novel while sipping the perfect latte. What's your ideal work environment?",
+    "timestamp": "2024-01-16T14:20:00Z",
+    "likes": 6
+  },
+  {
+    "Id": 5,
+    "author": "David Park",
+    "content": "Just launched my first mobile app! It's been months of late nights and countless iterations, but seeing users engage with something you built from scratch is incredibly rewarding. Grateful for everyone who supported this journey.",
+    "timestamp": "2024-01-17T11:00:00Z",
+    "likes": 23
+  }
+]
