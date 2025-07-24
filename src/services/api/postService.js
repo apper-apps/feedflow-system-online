@@ -63,7 +63,29 @@ class PostService {
     
     const deletedPost = { ...this.posts[index] }
     this.posts.splice(index, 1)
-    return deletedPost
+return deletedPost
+  }
+  
+  async search(keywords) {
+    await new Promise(resolve => setTimeout(resolve, 300))
+    
+    if (!keywords || keywords.trim() === '') {
+      return []
+    }
+    
+    const searchTerms = keywords.toLowerCase().trim().split(/\s+/)
+    const filteredPosts = this.posts.filter(post => {
+      const content = post.content.toLowerCase()
+      const author = post.author.toLowerCase()
+      
+      return searchTerms.some(term => 
+        content.includes(term) || author.includes(term)
+      )
+    })
+    
+    return [...filteredPosts].sort((a, b) => 
+      new Date(b.timestamp) - new Date(a.timestamp)
+    )
   }
 }
 

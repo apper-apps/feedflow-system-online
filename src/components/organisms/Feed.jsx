@@ -6,6 +6,8 @@ import NewPostForm from "@/components/molecules/NewPostForm"
 import Loading from "@/components/ui/Loading"
 import Error from "@/components/ui/Error"
 import Empty from "@/components/ui/Empty"
+import Header from "@/components/organisms/Header"
+import ApperIcon from "@/components/ApperIcon"
 import PostService from "@/services/api/postService"
 
 const Feed = () => {
@@ -13,6 +15,9 @@ const Feed = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState([])
+  const [isSearching, setIsSearching] = useState(false)
   const newPostFormRef = useRef(null)
   
   const loadPosts = async () => {
@@ -66,8 +71,35 @@ const Feed = () => {
       behavior: "smooth",
       block: "center"
     })
-  }
+}
   
+  const handleSearch = async (query) => {
+    setSearchQuery(query)
+    
+    if (!query.trim()) {
+      setSearchResults([])
+      setIsSearching(false)
+      return
+    }
+    
+    try {
+      setIsSearching(true)
+      const results = await PostService.search(query)
+      setSearchResults(results)
+    } catch (err) {
+      console.error("Error searching posts:", err)
+      toast.error("Failed to search posts. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+    } finally {
+      setIsSearching(false)
+    }
+  }
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-8">
@@ -97,16 +129,67 @@ const Feed = () => {
     )
   }
   
+const currentPosts = searchQuery ? searchResults : posts
+  const isShowingSearchResults = searchQuery.trim() !== ""
+  
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <div ref={newPostFormRef}>
-        <NewPostForm 
-          onSubmit={handleCreatePost}
-          isSubmitting={isSubmitting}
-        />
-      </div>
+<div className="max-w-2xl mx-auto px-4 py-8">
+      <Header onSearch={handleSearch} isSearching={isSearching} />
       
-      {posts.length === 0 ? (
+      {!isShowingSearchResults && (
+        <div ref={newPostFormRef}>
+          <NewPostForm 
+            onSubmit={handleCreatePost}
+            isSubmitting={isSubmitting}
+          />
+        </div>
+      )}
+      
+{isShowingSearchResults ? (
+        <div className="space-y-6 mt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900 font-display">
+              Search Results
+            </h2>
+            <span className="text-sm text-gray-500">
+              {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for "{searchQuery}"
+            </span>
+          </div>
+          
+          {searchResults.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ApperIcon name="Search" className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No posts found</h3>
+              <p className="text-gray-500">
+                Try adjusting your search terms or{" "}
+                <button 
+                  onClick={() => handleSearch("")}
+                  className="text-primary hover:text-primary/80 underline"
+                >
+                  clear search
+                </button>
+              </p>
+            </div>
+          ) : (
+            <AnimatePresence mode="popLayout">
+              {searchResults.map((post) => (
+                <motion.div
+                  key={post.Id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <PostCard post={post} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
+        </div>
+      ) : currentPosts.length === 0 ? (
         <Empty onCreatePost={scrollToNewPost} />
       ) : (
         <div className="space-y-6">
@@ -115,12 +198,12 @@ const Feed = () => {
               Recent Posts
             </h2>
             <span className="text-sm text-gray-500">
-              {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+              {currentPosts.length} {currentPosts.length === 1 ? 'post' : 'posts'}
             </span>
           </div>
           
-          <AnimatePresence mode="popLayout">
-            {posts.map((post) => (
+<AnimatePresence mode="popLayout">
+            {currentPosts.map((post) => (
               <motion.div
                 key={post.Id}
                 layout
@@ -132,7 +215,7 @@ const Feed = () => {
                 <PostCard post={post} />
               </motion.div>
             ))}
-          </AnimatePresence>
+</AnimatePresence>
         </div>
       )}
     </div>

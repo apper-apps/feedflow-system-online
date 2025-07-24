@@ -1,8 +1,8 @@
 import React from "react"
 import { motion } from "framer-motion"
 import ApperIcon from "@/components/ApperIcon"
-
-const Header = () => {
+import SearchBar from "@/components/molecules/SearchBar"
+const Header = ({ onSearch, isSearching }) => {
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -26,10 +26,8 @@ const Header = () => {
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200">
-              <ApperIcon name="Search" className="w-5 h-5" />
-            </button>
+<div className="flex items-center space-x-4">
+            <SearchBar onSearch={onSearch} isSearching={isSearching} />
             <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200">
               <ApperIcon name="Bell" className="w-5 h-5" />
             </button>
