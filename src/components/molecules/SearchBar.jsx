@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import ApperIcon from "@/components/ApperIcon"
-import { Input } from "@/components/atoms/Input"
+import React, { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import ApperIcon from '@/components/ApperIcon'
+import Input from '@/components/atoms/Input'
 
 const SearchBar = ({ onSearch, isSearching }) => {
   const [isExpanded, setIsExpanded] = useState(false)
